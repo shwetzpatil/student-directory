@@ -16,11 +16,12 @@ def print_header
   puts "--------------"
 end
 
-def print(names, letter)
+def print(names)
   names.each_with_index do |name, index|
-    if name[:name].start_with?(letter)
+    if name[:name].length < 12
+      puts name[:name].length
       puts "#{index + 1}. #{name[:name]} (#{name[:cohort]} cohort)"
-    end
+    end  
   end
 end
 
@@ -30,5 +31,5 @@ end
 # calling methods
 students = input_students
 print_header
-print(students, "s")
+print(students)
 print_footer(students)
