@@ -49,7 +49,7 @@ def print(names)
   end
   # puts student_hash
   student_hash.each do |key, value|
-    puts "List #{key} Cohort".center(50, "*")
+    puts "#{key.upcase} Cohort".center(50, "*")
     count = 1
     value.each do |student|
       puts "#{count}"
@@ -63,7 +63,11 @@ def print(names)
 end
 
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students".center(50, "*")
+  if names.count > 1
+    puts "Overall, we have #{names.count} great students".center(50, "*")
+  else
+    puts "Overall, we have #{names.count} great student".center(50, "*")
+  end
 end
 # calling methods
 students = input_students
