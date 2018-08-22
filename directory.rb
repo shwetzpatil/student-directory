@@ -4,7 +4,7 @@ def input_students
   students = []
   cohorts = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
   puts "Please enter the names of the student"
-  name = gets.chomp.capitalize
+  name = gets.delete!("\n").capitalize
  
   while !name.empty? do
     puts "Please enter cohort"
@@ -16,16 +16,16 @@ def input_students
       cohort_val = "august"
     end 
     
-    country = gets.chomp.capitalize
+    country = gets.delete!("\n").capitalize
     puts "Please enter age"
     
-    age = gets.chomp.to_i
+    age = gets.delete!("\n").to_i
     students << {name: name, cohort: cohort_val, country: country, age: age}
     
     puts "Now we have #{students.count} students"
     
     puts "Please enter the name of the student"
-    name = gets.chomp.capitalize
+    name = gets.delete!("\n").capitalize
   end
   students
 end
