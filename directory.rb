@@ -2,23 +2,25 @@ def input_students
   puts "To finish, just hit return twice"
   puts "Student Directory".center(50,"*")
   students = []
-  
+  cohorts = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
   puts "Please enter the names of the student"
   name = gets.chomp.capitalize
  
   while !name.empty? do
     puts "Please enter cohort"
-    cohort = gets.chomp.capitalize
+    cohort = gets.chomp
     puts "Please enter country of birth"
-    if cohort.empty?
-      cohort = "August"
+    if cohorts.include? (cohort)
+      cohort_val = cohort
+    else 
+      cohort_val = "august"
     end 
     
     country = gets.chomp.capitalize
     puts "Please enter age"
     
     age = gets.chomp.to_i
-    students << {name: name, cohort: cohort, country: country, age: age}
+    students << {name: name, cohort: cohort_val, country: country, age: age}
     
     puts "Now we have #{students.count} students"
     
@@ -34,14 +36,30 @@ def print_header
 end
 
 def print(names)
-  count = 0
-  while count < names.length do
-    puts " #{count + 1}.#{names[count][:name]}"
-    puts "  Cohort : #{names[count][:cohort]} cohort"
-    puts "  Country Of Birth : #{names[count][:country]}"
-    puts "  Age : #{names[count][:age]}"
-    count += 1
+  student_hash = {}
+  names.each do |student_with_cohort|
+    curr_cohort = student_with_cohort[:cohort] 
+    details = [student_with_cohort[:name], student_with_cohort[:age], student_with_cohort[:country]]
+    
+    if student_hash[curr_cohort] == nil
+      student_hash[curr_cohort] = [details]
+    else
+    student_hash[curr_cohort].push(details)
+    end
   end
+  # puts student_hash
+  student_hash.each do |key, value|
+    puts "List #{key} Cohort".center(50, "*")
+    count = 1
+    value.each do |student|
+      puts "#{count}"
+      puts "Name : #{student[0]}"
+      puts "Country of Birth : #{student[1]}"
+      puts "Age : #{student[2]}"
+      count += 1
+    end
+  end
+  
 end
 
 def print_footer(names)
