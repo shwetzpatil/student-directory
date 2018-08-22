@@ -2,18 +2,28 @@ def input_students
   puts "To finish, just hit return twice"
   puts "Student Directory".center(50,"*")
   students = []
+  
   puts "Please enter the names of the student"
-  name = gets.chomp
+  name = gets.chomp.capitalize
  
   while !name.empty? do
+    puts "Please enter cohort"
+    cohort = gets.chomp.capitalize
     puts "Please enter country of birth"
-    country = gets.chomp
+    if cohort.empty?
+      cohort = "August"
+    end 
+    
+    country = gets.chomp.capitalize
     puts "Please enter age"
-    age = gets.chomp
-    students << {name: name, cohort: :november, country: country, age: age}
+    
+    age = gets.chomp.to_i
+    students << {name: name, cohort: cohort, country: country, age: age}
+    
     puts "Now we have #{students.count} students"
+    
     puts "Please enter the name of the student"
-    name = gets.chomp
+    name = gets.chomp.capitalize
   end
   students
 end
@@ -26,9 +36,10 @@ end
 def print(names)
   count = 0
   while count < names.length do
-    puts " #{count + 1}. #{names[count][:name]} (#{names[count][:cohort]}) cohort".center(50," ")
-    puts "Country Of Birth : #{names[count][:country]}".center(50," ")
-    puts "Age : #{names[count][:age]}".center(50," ")
+    puts " #{count + 1}.#{names[count][:name]}"
+    puts "  Cohort : #{names[count][:cohort]} cohort"
+    puts "  Country Of Birth : #{names[count][:country]}"
+    puts "  Age : #{names[count][:age]}"
     count += 1
   end
 end
