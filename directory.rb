@@ -40,7 +40,7 @@ def print(names)
     student_hash = {}
     names.each do |student_with_cohort|
       curr_cohort = student_with_cohort[:cohort] 
-      details = [student_with_cohort[:name], student_with_cohort[:age], student_with_cohort[:country]]
+      details = [student_with_cohort[:name], student_with_cohort[:country],  student_with_cohort[:age]]
       
       if student_hash[curr_cohort] == nil
         student_hash[curr_cohort] = [details]
