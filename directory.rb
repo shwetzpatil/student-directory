@@ -1,11 +1,12 @@
+@students = []
+
 def input_students
   puts "To finish, just hit return twice"
   puts "Student Directory".center(50,"*")
-  students = []
   cohorts = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
-  puts "Please enter the details of the student"
-  name = gets.delete!("\n").capitalize
- 
+  puts "Please enter the name of the student"
+  name = gets.chomp.capitalize
+  
   while !name.empty? do
     puts "Please enter cohort"
     cohort = gets.chomp
@@ -16,18 +17,50 @@ def input_students
       cohort_val = "august"
     end 
     
-    country = gets.delete!("\n").capitalize
+    country = gets.chomp.capitalize
     puts "Please enter age"
     
-    age = gets.delete!("\n").to_i
-    students << {name: name, cohort: cohort_val, country: country, age: age}
+    age = gets.chomp.to_i
+    @students << {name: name, cohort: cohort_val, country: country, age: age}
     
-    puts "Now we have #{students.count} students"
+    puts "Now we have #{@students.count} students"
     
     puts "Please enter the name of the student"
-    name = gets.delete!("\n").capitalize
+    name = gets.chomp.capitalize
   end
-  students
+  @students
+end
+
+def interactive_menu
+  loop do
+    print_menu
+    process(gets.chomp)
+  end
+end
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+end
+
+def show_students
+  print_header
+  print_student_list
+  print_footer
+end
+
+def process(selection)
+  case selection
+    when "1"
+      input_students
+    when "2"
+      show_students
+    when "9"
+      exit
+    else
+      puts "I don't know what you mean, try again"
+  end
 end
   
 def print_header
@@ -35,10 +68,10 @@ def print_header
   puts "___________".center(50, "_")
 end
 
-def print(names)
-  if names.length > 0
+def print_student_list
+  if @students.length > 0
     student_hash = {}
-    names.each do |student_with_cohort|
+    @students.each do |student_with_cohort|
       curr_cohort = student_with_cohort[:cohort] 
       details = [student_with_cohort[:name], student_with_cohort[:country],  student_with_cohort[:age]]
       
@@ -60,43 +93,24 @@ def print(names)
         count += 1
       end
     end
-  # else
-  #   puts "Sorry, empty list"
   end
 end
 
-def print_footer(names)
-  if names.count > 1
-    puts "Overall, we have #{names.count} great students".center(50, "*")
-  elsif names.count == 1
-    puts "Overall, we have #{names.count} great student".center(50, "*")
+def print_footer
+  if @students.count > 1
+    puts "Overall, we have #{@students.count} great students".center(50, "*")
+  elsif @students.count == 1
+    puts "Overall, we have #{@students.count} great student".center(50, "*")
   end
 end
 
-def interactive_menu
-  students = []
-  
-  loop do
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. Exit"
-    
-    selection = gets.chomp
-    
-    case selection
-    when "1"
-      students = input_students
-    when "2"
-      print_header
-      print(students)
-      print_footer(students)
-    when "9"
-      exit
-    else
-      puts "I don't know what you meant, try again"
-    end
-  end
-end
+
+
+
+
+
+
+
 # calling methods
 # students = input_students
 # print_header
