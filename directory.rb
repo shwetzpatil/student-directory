@@ -5,11 +5,11 @@ def input_students
   puts "Student Directory".center(50,"*")
   cohorts = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
   puts "Please enter the name of the student"
-  name = gets.chomp.capitalize
+  name = STDIN.gets.chomp.capitalize
   
   while !name.empty? do
     puts "Please enter cohort"
-    cohort = gets.chomp
+    cohort = STDIN.gets.chomp
     puts "Please enter country of birth"
     if cohorts.include? (cohort)
       cohort_val = cohort
@@ -17,16 +17,16 @@ def input_students
       cohort_val = "august"
     end 
     
-    country = gets.chomp.capitalize
+    country = STDIN.gets.chomp.capitalize
     puts "Please enter age"
     
-    age = gets.chomp.to_i
+    age = STDIN.gets.chomp.to_i
     @students << {name: name, cohort: cohort_val, country: country, age: age}
     
     puts "Now we have #{@students.count} students"
     
     puts "Please enter the name of the student"
-    name = gets.chomp.capitalize
+    name = STDIN.gets.chomp.capitalize
   end
   @students
 end
@@ -34,7 +34,7 @@ end
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -119,14 +119,29 @@ def save_students
   end
   file.close
 end
-def load_students
-  file = File.open("students.csv", "r")
+
+def load_students(filename = "students.csv") 
+  file = File.open(filename, "r")
   file.readlines.each do |line|
-  name, cohort = line.chomp.split(',')
-    @students << {name: name, cohort: cohort.to_sym}
+  name, cohort, age, country = line.chomp.split(',')
+    @students << {name: name, cohort: cohort.to_sym, age: age, country: country}
   end
   file.close
 end  
+
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+      puts "Loaded #{@students.count} from #{filename}"
+  else 
+    puts "Sorry, #{filename} doesn't exist."
+    exit
+  end
+end
+
+try_load_students
 interactive_menu
 
 
