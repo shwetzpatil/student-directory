@@ -1,34 +1,40 @@
 @students = []
+@name = ""
+@country = ""
+@age = 0
 
 def input_students
   puts "To finish, just hit return twice"
   puts "Student Directory".center(50,"*")
   cohorts = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
   puts "Please enter the name of the student"
-  name = STDIN.gets.chomp.capitalize
+  @name = STDIN.gets.chomp.capitalize
   
-  while !name.empty? do
+  while !@name.empty? do
     puts "Please enter cohort"
-    cohort = STDIN.gets.chomp
-    puts "Please enter country of birth"
-    if cohorts.include? (cohort)
-      cohort_val = cohort
-    else 
-      cohort_val = "august"
+    @cohort = STDIN.gets.chomp
+    if !cohorts.include? (@cohort)
+      @cohort = "august"
     end 
     
-    country = STDIN.gets.chomp.capitalize
-    puts "Please enter age"
+    puts "Please enter country of birth"
+    @country = STDIN.gets.chomp.capitalize
     
-    age = STDIN.gets.chomp.to_i
-    @students << {name: name, cohort: cohort_val, country: country, age: age}
+    puts "Please enter age"
+    @age = STDIN.gets.chomp.to_i
+    
+    student_list_data
     
     puts "Now we have #{@students.count} students"
     
     puts "Please enter the name of the student"
-    name = STDIN.gets.chomp.capitalize
+    @name = STDIN.gets.chomp.capitalize
   end
   @students
+end
+
+def student_list_data
+  @students << {name: @name, cohort: @cohort, country: @country, age: @age}
 end
 
 def interactive_menu
@@ -123,8 +129,8 @@ end
 def load_students(filename = "students.csv") 
   file = File.open(filename, "r")
   file.readlines.each do |line|
-  name, cohort, age, country = line.chomp.split(',')
-    @students << {name: name, cohort: cohort.to_sym, age: age, country: country}
+  @name, @cohort, @age, @country = line.chomp.split(',')
+  student_list_data
   end
   file.close
 end  
