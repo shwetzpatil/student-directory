@@ -7,7 +7,6 @@ def input_students
   while true do
     puts "Please enter the name of the student"
     name = STDIN.gets.chomp.capitalize
-    
     if name.empty? 
       break
     end
@@ -31,7 +30,6 @@ end
 
 def valid_cohort(cohort)
   cohorts = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
-
   if cohorts.include?(cohort)
     return cohort
   else 
@@ -129,23 +127,22 @@ def save_students
   if filename.empty?
     return
   end  
-  file = File.open(filename, "w")
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:age], student[:country]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+  File.open(filename, "w") do |file|
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort], student[:age], student[:country]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+    end  
   end
-  file.close
 end
 
 def load_students(filename) 
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-  name, cohort, age, country = line.chomp.split(',')
-
-  student_list_data(name, valid_cohort(cohort), age, country)
-  end
-  file.close
+  File.open(filename, "r") do |file|
+    file.readlines.each do |line|
+      name, cohort, age, country = line.chomp.split(',')
+      student_list_data(name, valid_cohort(cohort), age, country)
+    end
+  end  
 end
 
 def load_students_with_user_file
