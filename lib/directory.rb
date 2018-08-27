@@ -47,6 +47,7 @@ def interactive_menu
   loop do
     print_menu
     process(STDIN.gets.chomp)
+    puts "#{"Thanks your input was successfully handled".center(50,"+")}\n\n"
   end
 end
 
