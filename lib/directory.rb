@@ -1,40 +1,46 @@
 @students = []
-@name = ""
-@country = ""
-@age = 0
 
 def input_students
   puts "To finish, just hit return twice"
   puts "Student Directory".center(50,"*")
-  cohorts = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
-  puts "Please enter the name of the student"
-  @name = STDIN.gets.chomp.capitalize
   
-  while !@name.empty? do
+  while true do
+    puts "Please enter the name of the student"
+    name = STDIN.gets.chomp.capitalize
+    
+    if name.empty? 
+      break
+    end
+  
     puts "Please enter cohort"
-    @cohort = STDIN.gets.chomp
-    if !cohorts.include? (@cohort)
-      @cohort = "august"
-    end 
+    cohort = STDIN.gets.chomp
+    cohort = valid_cohort(cohort)
     
     puts "Please enter country of birth"
-    @country = STDIN.gets.chomp.capitalize
+    country = STDIN.gets.chomp.capitalize
     
     puts "Please enter age"
-    @age = STDIN.gets.chomp.to_i
+    age = STDIN.gets.chomp.to_i
     
-    student_list_data
+    student_list_data(name, cohort, age, country)
     
     puts "Now we have #{@students.count} students"
-    
-    puts "Please enter the name of the student"
-    @name = STDIN.gets.chomp.capitalize
   end
   @students
 end
 
-def student_list_data
-  @students << {name: @name, cohort: @cohort, country: @country, age: @age}
+def valid_cohort(cohort)
+  cohorts = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
+
+  if cohorts.include?(cohort)
+    return cohort
+  else 
+    return "august"
+  end    
+end
+
+def student_list_data(name, cohort, age, country)
+  @students << {name: name, cohort: cohort, country: country, age: age}
 end
 
 def interactive_menu
@@ -129,26 +135,34 @@ end
 def load_students(filename = "students.csv") 
   file = File.open(filename, "r")
   file.readlines.each do |line|
-  @name, @cohort, @age, @country = line.chomp.split(',')
-  student_list_data
+  name, cohort, age, country = line.chomp.split(',')
+
+  student_list_data(name, valid_cohort(cohort), age, country)
   end
   file.close
 end  
 
 def try_load_students
   filename = ARGV.first
+  puts filename
   if filename.nil?
     load_students
   elsif File.exists?(filename)
     load_students(filename)
-      puts "Loaded #{@students.count} from #{filename}"
+    puts "Loaded #{@students.count} from #{filename}"
   else 
     puts "Sorry, #{filename} doesn't exist."
     exit
   end
 end
 
-try_load_students
-interactive_menu
+#this piece of code does not run when required in other files(eg. rspec files, directory2.rb)
+#this piece of code runs only when it is run as a script (i.e. when run as ruby lib/directory.rb). 
+# When you run this file as a script, __FILE__ is the name of the current filename and $0 is the name of the script being run by the ruby command.
+# So in this case (i.e. when run as ruby lib/directory.rb), __FILE__ == 'lib/directory.rb' and $0 == 'lib/directory.rb'
+if __FILE__==$0
+  try_load_students
+  interactive_menu
+end
 
 
