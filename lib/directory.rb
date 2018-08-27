@@ -1,3 +1,5 @@
+require "csv"
+
 @students = []
 
 def input_students
@@ -45,7 +47,7 @@ def interactive_menu
   loop do
     print_menu
     process(STDIN.gets.chomp)
-    puts "#{"Thanks your input was successfully handled".center(50,"+")}\n\n"
+    puts "\n #{"Thanks your input was successfully handled".center(50,"-")}\n\n"
   end
 end
 
@@ -127,22 +129,21 @@ def save_students
   if filename.empty?
     return
   end  
-  File.open(filename, "w") do |file|
+  CSV.open(filename, "wb") do |csv|
     @students.each do |student|
-      student_data = [student[:name], student[:cohort], student[:age], student[:country]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
-    end  
+      csv << [student[:name], student[:cohort], student[:age], student[:country]]
+    end
   end
 end
 
 def load_students(filename) 
-  File.open(filename, "r") do |file|
-    file.readlines.each do |line|
-      name, cohort, age, country = line.chomp.split(',')
-      student_list_data(name, valid_cohort(cohort), age, country)
-    end
-  end  
+  CSV.foreach(filename) do |row|
+    name = row[0]
+    cohort = row[1]
+    age = row[2]
+    country = row[3]
+    student_list_data(name, valid_cohort(cohort), age, country)
+  end
 end
 
 def load_students_with_user_file
@@ -150,13 +151,15 @@ def load_students_with_user_file
   filename = STDIN.gets.chomp
   if filename.empty? 
     return
+  elsif !File.exists?(filename)
+    puts "ERROR::#{filename} - no such file or directory".center(50, "!")  
+    return
   end  
   load_students(filename)
 end  
 
 def try_load_students
   filename = ARGV.first
-  puts filename
   if filename.nil?
     return
   elsif File.exists?(filename)
