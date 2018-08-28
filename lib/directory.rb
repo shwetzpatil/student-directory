@@ -176,6 +176,7 @@ end
 # When you run this file as a script, __FILE__ is the name of the current filename and $0 is the name of the script being run by the ruby command.
 # So in this case (i.e. when run as ruby lib/directory.rb), __FILE__ == 'lib/directory.rb' and $0 == 'lib/directory.rb'
 if __FILE__==$0
+  puts $0
   try_load_students
   interactive_menu
 end
